@@ -1,0 +1,67 @@
+# Lumora AI: keep interpreter-generated Python files and virtual environments out of version control.
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+ENV/
+
+# Environment variables and local secrets should stay on the developer machine.
+.env
+.env.local
+.env.development.local
+.env.production.local
+.env.test.local
+
+# Node.js dependencies and package-manager log files are machine-specific and reproducible.
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js build output and deployment artifacts are generated locally or by hosting platforms.
+.next/
+out/
+.vercel/
+
+# Build and coverage output should be regenerated, not committed.
+dist/
+build/
+coverage/
+
+# IDE metadata is personal and can vary across contributors.
+.vscode/
+.idea/
+*.code-workspace
+
+# Operating system files add noise and are not part of the app.
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Log directories and log files are transient runtime output.
+logs/
+*.log
+
+# Cache files are derived data and can be safely recreated.
+.cache/
+.eslintcache
+
+# Local MongoDB data directories should never be committed.
+mongodb-data/
+
+# Temporary files are editor- or process-generated and disposable.
+*.tmp
+*.temp
+
+# Miscellaneous backup and swap files are typically created by editors.
+*.bak
+*.swp

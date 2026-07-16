@@ -1,0 +1,34 @@
+# ── Web framework ──────────────────────────────────────────────────────────────
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.12
+
+# ── Data validation ────────────────────────────────────────────────────────────
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+email-validator>=2.2.0
+
+# ── Auth / security ────────────────────────────────────────────────────────────
+python-jose[cryptography]>=3.3.0
+passlib[bcrypt]>=1.7.4
+
+# ── HTTP client ────────────────────────────────────────────────────────────────
+httpx>=0.27.0
+
+# ── MongoDB (async) ───────────────────────────────────────────────────────────
+motor>=3.6.0          # AsyncIOMotorClient — direct async driver
+beanie>=1.27.0        # Async ODM built on Motor (used for document models)
+
+# ── IBM Watsonx / Granite ──────────────────────────────────────────────────────
+ibm-watsonx-ai>=1.1.0
+
+# ── Environment / config ──────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+
+# ── Rate limiting ──────────────────────────────────────────────────────────────
+slowapi>=0.1.9
+
+# ── Testing ────────────────────────────────────────────────────────────────────
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+httpx>=0.27.0           # also used as async test client

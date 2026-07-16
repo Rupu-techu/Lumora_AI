@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&display=swap');
+
+/* ── Design tokens ───────────────────────────────────────────────── */
+:root {
+  --brand-purple:   #7c3aed;
+  --brand-indigo:   #4f46e5;
+  --brand-blue:     #2563eb;
+  --brand-dark:     #09090f;
+  --surface-1:      #0f0f1a;
+  --surface-2:      #141428;
+  --border-subtle:  rgba(255,255,255,0.065);
+  --border-mid:     rgba(255,255,255,0.10);
+  --text-primary:   #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted:     #475569;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--brand-dark);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────── */
+::-webkit-scrollbar         { width: 4px; }
+::-webkit-scrollbar-track   { background: var(--brand-dark); }
+::-webkit-scrollbar-thumb   { background: rgba(124,58,237,0.4); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(124,58,237,0.6); }
+
+/* ── Typography ──────────────────────────────────────────────────── */
+
+/* Subtle lavender accent — used on ONE keyword per headline */
+.accent-text {
+  color: #a78bfa;
+}
+
+/* Very gentle gradient — used sparingly */
+.gradient-text {
+  background: linear-gradient(135deg, #c4b5fd 0%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Legacy warm gradient (kept for dashboard) */
+.gradient-text-warm {
+  background: linear-gradient(135deg, #f472b6 0%, #a78bfa 50%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Glow — kept for dashboard, massively reduced for landing ────── */
+.glow-purple { box-shadow: 0 0 20px rgba(124,58,237,0.12); }
+.glow-blue   { box-shadow: 0 0 20px rgba(37,99,235,0.12); }
+
+/* ── Glassmorphism ───────────────────────────────────────────────── */
+.glass-card {
+  background: rgba(15,15,28,0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+}
+
+.glass-card-bright {
+  background: rgba(20,20,40,0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--border-mid);
+}
+
+/* Card hover — lift only, no glow pulse */
+.glass-card-hover {
+  transition: border-color 0.35s ease, transform 0.35s ease, box-shadow 0.35s ease;
+}
+.glass-card-hover:hover {
+  border-color: rgba(124,58,237,0.22);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04);
+  transform: translateY(-3px);
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────── */
+
+/* Primary — clean indigo with elegant shadow, no constant glow */
+.btn-primary {
+  @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white relative overflow-hidden;
+  background: linear-gradient(135deg, #4f46e5 0%, #3730a3 100%);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 4px 16px rgba(79,70,229,0.18);
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.10) 0%, transparent 55%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4), 0 8px 28px rgba(79,70,229,0.28);
+  filter: brightness(1.08);
+}
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:active { transform: translateY(0); box-shadow: none; }
+
+/* Secondary — barely-there glass outline */
+.btn-secondary {
+  @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-slate-300;
+  background: rgba(255,255,255,0.035);
+  border: 1px solid var(--border-mid);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.065);
+  border-color: rgba(255,255,255,0.18);
+  color: #f8fafc;
+}
+.btn-secondary:active { background: rgba(255,255,255,0.04); }
+
+/* ── Surface cards (premium, no gradient border glow) ────────────── */
+.surface-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.surface-card:hover {
+  border-color: rgba(124,58,237,0.18);
+  transform: translateY(-2px);
+}
+
+/* ── Gradient border (subtle, replaces the old flashy version) ────── */
+.gradient-border-card {
+  position: relative;
+  border-radius: 1rem;
+}
+.gradient-border-card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(79,70,229,0.15), rgba(124,58,237,0.05));
+  z-index: -1;
+}
+
+/* ── Background grid ─────────────────────────────────────────────── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+.bg-grid-sm {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* ── Noise overlay — film grain at barely-visible opacity ─────────── */
+.noise-overlay { position: relative; }
+.noise-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.018;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ── Keyframes ───────────────────────────────────────────────────── */
+
+/* Gentle float — no rotation, very slow */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Micro-drift for hero mockup */
+@keyframes drift {
+  0%, 100% { transform: translateY(0px) rotateX(8deg); }
+  50%       { transform: translateY(-6px) rotateX(7deg); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+/* Legacy — kept for dashboard only */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(124,58,237,0.12); }
+  50%       { box-shadow: 0 0 24px rgba(124,58,237,0.22); }
+}
+
+@keyframes ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Utility animation classes ───────────────────────────────────── */
+.animate-float      { animation: float 8s ease-in-out infinite; }
+.animate-drift      { animation: drift 7s ease-in-out infinite; }
+.animate-spin-slow  { animation: spin-slow 24s linear infinite; }
+.animate-pulse-glow { animation: pulse-glow 4s ease-in-out infinite; }
+.animate-fade-up    { animation: fade-up 0.6s ease forwards; }
+
+/* Removed: shimmer-text for headlines — too flashy for premium feel */
+
+/* ── Ticker / marquee ────────────────────────────────────────────── */
+.ticker-wrap { overflow: hidden; }
+.ticker-inner {
+  display: flex;
+  animation: ticker 36s linear infinite;
+  width: max-content;
+}
+
+/* ── Section divider — barely-there hairline ─────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+}
+
+/* ── Browser chrome mockup ───────────────────────────────────────── */
+.browser-chrome {
+  background: rgba(18,18,32,0.9);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ── Pill badge ──────────────────────────────────────────────────── */
+.pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-mid);
+  background: rgba(255,255,255,0.04);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+}
+
+/* ── Feature icon wrapper ────────────────────────────────────────── */
+.feature-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.04);
+}
