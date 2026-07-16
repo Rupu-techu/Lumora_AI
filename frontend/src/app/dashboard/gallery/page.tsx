@@ -123,7 +123,7 @@ export default function GalleryPage() {
               <div className="flex items-center gap-2 flex-shrink-0">
                 <a
                   href={selectedImage.src}
-                  download="imaginex-image.jpg"
+                  download="lumora-image.jpg"
                   className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/5 transition-colors"
                   title="Download"
                 >

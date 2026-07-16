@@ -205,7 +205,7 @@ export default function GeneratePage() {
                     </button>
                     <a
                       href={result}
-                      download="imaginex-generation.jpg"
+                      download="lumora-generation.jpg"
                       className="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"
                       title="Download"
                     >

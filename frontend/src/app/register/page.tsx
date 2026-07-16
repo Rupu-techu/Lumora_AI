@@ -40,7 +40,7 @@ export default function RegisterPage() {
     try {
       // Demo: simulate API call
       await new Promise((r) => setTimeout(r, 1400));
-      localStorage.setItem("imaginex_token", "demo_token");
+      localStorage.setItem("lumora_token", "demo_token");
       router.push("/dashboard");
     } catch {
       setApiError("Something went wrong. Please try again.");
@@ -66,7 +66,7 @@ export default function RegisterPage() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl">
-              <span className="gradient-text">Imaginex</span>
+              <span className="gradient-text">Lumora</span>
               <span className="text-slate-300"> AI</span>
             </span>
           </Link>

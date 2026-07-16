@@ -31,7 +31,7 @@ export default function LoginPage() {
     try {
       // Demo: simulate API call, then redirect to dashboard
       await new Promise((r) => setTimeout(r, 1200));
-      localStorage.setItem("imaginex_token", "demo_token");
+      localStorage.setItem("lumora_token", "demo_token");
       router.push("/dashboard");
     } catch {
       setApiError("Invalid credentials. Please try again.");
@@ -57,7 +57,7 @@ export default function LoginPage() {
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl">
-              <span className="gradient-text">Imaginex</span>
+              <span className="gradient-text">Lumora</span>
               <span className="text-slate-300"> AI</span>
             </span>
           </Link>

@@ -484,7 +484,7 @@ export default function DashboardPage() {
         <div className="flex-1 relative z-10 min-w-0">
           <h2 className="text-white font-bold text-xl mb-1">Start your next story</h2>
           <p className="text-slate-300 text-sm leading-relaxed max-w-lg">
-            Choose a template, name your world, and let Imaginex AI help you build characters, scenes, and narrative arcs — powered by IBM Granite.
+            Choose a template, name your world, and let Lumora AI help you build characters, scenes, and narrative arcs — powered by IBM Granite.
           </p>
         </div>
 

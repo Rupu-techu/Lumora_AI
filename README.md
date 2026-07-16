@@ -1,4 +1,4 @@
-# Imaginex AI
+# Lumora AI
 
 A modern full-stack AI web application built with **Next.js 15**, **TypeScript**, **Tailwind CSS**, and **FastAPI** — powered by **IBM Granite** foundation models.
 
@@ -7,7 +7,7 @@ A modern full-stack AI web application built with **Next.js 15**, **TypeScript**
 ## 🗂 Project Structure
 
 ```
-imaginex-ai/
+lumora-ai/
 ├── frontend/                  # Next.js 15 + TypeScript + Tailwind CSS
 │   ├── src/
 │   │   ├── app/
@@ -136,4 +136,4 @@ Tokens are stored in `localStorage` and attached via an Axios request intercepto
 
 ## 📄 License
 
-MIT © Imaginex AI
+MIT © Lumora AI

@@ -109,7 +109,7 @@ export default function DashboardSidebar({
   const [collapsed, setCollapsed] = useState(false);
 
   function handleLogout() {
-    if (typeof window !== "undefined") localStorage.removeItem("imaginex_token");
+    if (typeof window !== "undefined") localStorage.removeItem("lumora_token");
     router.push("/login");
   }
 
@@ -134,7 +134,7 @@ export default function DashboardSidebar({
         </motion.div>
         {(!collapsed || isMobile) && (
           <span className="font-bold text-[1.05rem] leading-none">
-            <span className="gradient-text">Imaginex</span>
+            <span className="gradient-text">Lumora</span>
             <span className="text-slate-400"> AI</span>
           </span>
         )}

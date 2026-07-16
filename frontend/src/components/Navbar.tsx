@@ -50,7 +50,7 @@ export default function Navbar() {
               </svg>
             </div>
             <span className="font-semibold text-[0.95rem] tracking-tight text-white/90 group-hover:text-white transition-colors duration-200">
-              Imaginex
+              Lumora
             </span>
           </Link>
 

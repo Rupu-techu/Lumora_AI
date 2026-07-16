@@ -83,7 +83,7 @@ const workflowSteps = [
   {
     step: "04",
     title: "Export and deploy",
-    description: "Download assets, share via link, or push directly to your pipeline through the Imaginex REST API.",
+    description: "Download assets, share via link, or push directly to your pipeline through the Lumora REST API.",
     icon: Globe,
   },
 ];
@@ -93,7 +93,7 @@ const testimonials = [
     name: "Sarah Chen",
     role: "Creative Director, Verb Agency",
     avatar: "SC",
-    quote: "Imaginex AI cut our concept-to-asset time by 80%. What used to take days now takes minutes — and the quality is consistently stunning.",
+    quote: "Lumora AI cut our concept-to-asset time by 80%. What used to take days now takes minutes — and the quality is consistently stunning.",
   },
   {
     name: "Marcus Osei",
@@ -105,7 +105,7 @@ const testimonials = [
     name: "Lena Vogt",
     role: "Founder, Stillwater Studio",
     avatar: "LV",
-    quote: "I replaced three separate tools with Imaginex. The multi-modal workspace is a game-changer — like having a whole creative department.",
+    quote: "I replaced three separate tools with Lumora. The multi-modal workspace is a game-changer — like having a whole creative department.",
   },
 ];
 
@@ -227,7 +227,7 @@ export default function HomePage() {
             transition={{ delay: 0.5, duration: 0.6 }}
             className="text-base sm:text-lg lg:text-xl text-slate-400 max-w-xl mx-auto mb-11 leading-relaxed font-light"
           >
-            Imaginex AI pairs IBM&apos;s most capable Granite models with a
+            Lumora AI pairs IBM&apos;s most capable Granite models with a
             workspace built for professionals — go from prompt to production in seconds.
           </motion.p>
 
@@ -297,7 +297,7 @@ export default function HomePage() {
               <div className="flex-1 mx-3">
                 <div className="bg-white/[0.04] rounded-md h-5 max-w-xs mx-auto flex items-center justify-center">
                   <span className="text-slate-600 text-[10px] font-mono tracking-wide">
-                    app.imaginex.ai/dashboard
+                    app.lumora.ai/dashboard
                   </span>
                 </div>
               </div>
@@ -585,7 +585,7 @@ export default function HomePage() {
               Loved by <span className="accent-text">creators</span>
             </h2>
             <p className="text-slate-400 text-base max-w-sm mx-auto font-light leading-relaxed">
-              See what teams and individuals are building with Imaginex AI.
+              See what teams and individuals are building with Lumora AI.
             </p>
           </FadeInSection>
 
@@ -768,7 +768,7 @@ export default function HomePage() {
                   viewport={{ once: true }}
                   className="text-slate-400 text-base sm:text-lg mb-10 max-w-md mx-auto font-light leading-relaxed"
                 >
-                  Join 50,000+ creators already building with Imaginex AI.
+                  Join 50,000+ creators already building with Lumora AI.
                   Your first 100 generations are on us.
                 </motion.p>
 

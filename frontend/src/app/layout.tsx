@@ -1,10 +1,39 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
 export const metadata: Metadata = {
-  title: "Imaginex AI — Create Without Limits",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Lumora AI",
+    template: "%s | Lumora AI",
+  },
   description:
-    "Imaginex AI is a powerful platform for AI-driven image generation and creative workflows powered by IBM Granite.",
+    "Lumora AI is a powerful platform for AI-driven image generation and creative workflows powered by IBM Granite.",
+  applicationName: "Lumora AI",
+  keywords: [
+    "Lumora AI",
+    "AI image generation",
+    "creative workflows",
+    "IBM Granite",
+    "Next.js",
+    "FastAPI",
+  ],
+  openGraph: {
+    title: "Lumora AI",
+    description:
+      "Lumora AI is a powerful platform for AI-driven image generation and creative workflows powered by IBM Granite.",
+    url: "/",
+    siteName: "Lumora AI",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Lumora AI",
+    description:
+      "Lumora AI is a powerful platform for AI-driven image generation and creative workflows powered by IBM Granite.",
+  },
   icons: {
     icon: "/favicon.ico",
   },

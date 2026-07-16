@@ -29,7 +29,7 @@ const socials = [
   { Icon: Github,   href: "https://github.com",    label: "GitHub"   },
   { Icon: Twitter,  href: "https://twitter.com",   label: "Twitter"  },
   { Icon: Linkedin, href: "https://linkedin.com",  label: "LinkedIn" },
-  { Icon: Mail,     href: "mailto:hello@imaginex.ai", label: "Email" },
+  { Icon: Mail,     href: "mailto:hello@lumora.ai", label: "Email" },
 ];
 
 export default function Footer() {
@@ -38,7 +38,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-10">
 
         <div className="grid grid-cols-1 md:grid-cols-5 gap-12 mb-14">
-          {/* ── Brand column ── */}
+          {/* Brand column */}
           <FadeInSection direction="up" delay={0} className="md:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 mb-5 group">
               <motion.div
@@ -50,14 +50,14 @@ export default function Footer() {
                 <Sparkles className="w-4 h-4 text-white" />
               </motion.div>
               <span className="font-bold text-lg">
-                <span className="gradient-text">Imaginex</span>
+                <span className="gradient-text">Lumora</span>
                 <span className="text-slate-300"> AI</span>
               </span>
             </Link>
 
             <p className="text-slate-400 text-sm leading-relaxed max-w-xs mb-6">
               The next-generation AI platform for creative professionals.
-              Powered by IBM Granite — built for the future of creation.
+              Powered by IBM Granite â€” built for the future of creation.
             </p>
 
             {/* Newsletter stub */}
@@ -98,7 +98,7 @@ export default function Footer() {
             </div>
           </FadeInSection>
 
-          {/* ── Link columns ── */}
+          {/* Link columns */}
           {Object.entries(footerLinks).map(([group, links], colIdx) => (
             <FadeInSection key={group} direction="up" delay={0.1 + colIdx * 0.06}>
               <h4 className="text-white font-semibold text-sm mb-5 tracking-wide">{group}</h4>
@@ -119,7 +119,7 @@ export default function Footer() {
           ))}
         </div>
 
-        {/* ── Bottom bar ── */}
+        {/* Bottom bar */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <motion.p
             initial={{ opacity: 0 }}
@@ -128,7 +128,7 @@ export default function Footer() {
             viewport={{ once: true }}
             className="text-slate-500 text-sm"
           >
-            © {new Date().getFullYear()} Imaginex AI. All rights reserved.
+            &copy; {new Date().getFullYear()} Lumora AI. All rights reserved.
           </motion.p>
 
           <motion.div

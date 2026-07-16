@@ -25,7 +25,7 @@ const api = axios.create({
 /** Attach stored JWT on every request. */
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("imaginex_token");
+    const token = localStorage.getItem("lumora_token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
@@ -36,8 +36,8 @@ api.interceptors.response.use(
   (res) => res,
   (error) => {
     if (error.response?.status === 401 && typeof window !== "undefined") {
-      localStorage.removeItem("imaginex_token");
-      localStorage.removeItem("imaginex_refresh_token");
+      localStorage.removeItem("lumora_token");
+      localStorage.removeItem("lumora_refresh_token");
       window.location.href = "/login";
     }
     return Promise.reject(error);
