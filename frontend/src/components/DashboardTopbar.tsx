@@ -8,7 +8,7 @@ import Link from "next/link";
 
 // Build breadcrumb from pathname
 function useBreadcrumb() {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "/";
   const segments = pathname.split("/").filter(Boolean);
   return segments.map((seg, i) => ({
     label: seg

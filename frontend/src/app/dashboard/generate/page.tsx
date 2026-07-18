@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Wand2, Loader2, Sparkles, Copy, Download, RefreshCw, Settings2 } from "lucide-react";
+import { graniteApi } from "@/lib/api";
 
 const models = [
   { id: "granite-13b", label: "Granite 13B" },
@@ -21,6 +22,7 @@ export default function GeneratePage() {
   const [steps, setSteps] = useState(30);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
+  const [error, setError] = useState("");
   const [showSettings, setShowSettings] = useState(false);
 
   async function handleGenerate(e: React.FormEvent) {
@@ -28,10 +30,19 @@ export default function GeneratePage() {
     if (!prompt.trim() || loading) return;
     setLoading(true);
     setResult(null);
-    // Simulate generation
-    await new Promise((r) => setTimeout(r, 2500));
-    setResult("https://picsum.photos/seed/" + Date.now() + "/800/600");
-    setLoading(false);
+    setError("");
+    try {
+      const response = await graniteApi.imagine(prompt.trim());
+      const imageUrl = response.data.image_url as string | null;
+      if (!imageUrl) {
+        throw new Error("The backend did not return an image URL.");
+      }
+      setResult(imageUrl);
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || err?.message || "Image generation failed.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -42,6 +53,12 @@ export default function GeneratePage() {
           Describe your vision and let IBM Granite bring it to life.
         </p>
       </div>
+
+      {error && (
+        <div className="glass-card rounded-2xl px-4 py-3 text-sm text-red-300 border border-red-500/20">
+          {error}
+        </div>
+      )}
 
       <div className="grid lg:grid-cols-5 gap-6">
         {/* Controls */}

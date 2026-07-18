@@ -3,20 +3,14 @@
 import { useState } from "react";
 import { Search, Download, Trash2, Filter, ImageIcon, X } from "lucide-react";
 
-const images = Array.from({ length: 18 }, (_, i) => ({
-  id: String(i + 1),
-  src: `https://picsum.photos/seed/${i + 10}/400/300`,
-  prompt: [
-    "A futuristic cityscape at night with neon lights",
-    "Abstract watercolor painting of mountain peaks",
-    "Minimalist product photography, white background",
-    "Portrait of a cyberpunk character, digital art",
-    "Tropical beach sunset, golden hour photography",
-    "Dark fantasy forest with glowing mushrooms",
-  ][i % 6],
-  createdAt: `${Math.floor(Math.random() * 7) + 1}d ago`,
-}));
+type GalleryImage = {
+  id: string;
+  src: string;
+  prompt: string;
+  createdAt: string;
+};
 
+const images: GalleryImage[] = [];
 const filters = ["All", "Today", "This week", "This month"];
 
 export default function GalleryPage() {
@@ -26,20 +20,17 @@ export default function GalleryPage() {
 
   const selectedImage = images.find((img) => img.id === selected);
 
-  const filtered = images.filter(
-    (img) =>
-      img.prompt.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = images.filter((img) => img.prompt.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div className="space-y-6 animate-fade-in">
-      {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-white mb-1">Gallery</h1>
-        <p className="text-slate-400 text-sm">{images.length} images in your collection</p>
+        <p className="text-slate-400 text-sm">
+          {images.length} images in your collection
+        </p>
       </div>
 
-      {/* Toolbar */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="flex items-center gap-2 glass-card rounded-xl px-4 py-2.5 flex-1 max-w-sm">
           <Search className="w-4 h-4 text-slate-500 flex-shrink-0" />
@@ -52,24 +43,23 @@ export default function GalleryPage() {
         </div>
         <div className="flex items-center gap-2">
           <Filter className="w-4 h-4 text-slate-500" />
-          {filters.map((f) => (
+          {filters.map((filter) => (
             <button
-              key={f}
-              onClick={() => setActiveFilter(f)}
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${
-                activeFilter === f
+                activeFilter === filter
                   ? "text-white border-purple-500/50"
                   : "text-slate-400 border-white/5 hover:border-white/15"
               }`}
-              style={activeFilter === f ? { background: "rgba(124,58,237,0.15)" } : undefined}
+              style={activeFilter === filter ? { background: "rgba(124,58,237,0.15)" } : undefined}
             >
-              {f}
+              {filter}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
         {filtered.map((img) => (
           <div
@@ -93,12 +83,14 @@ export default function GalleryPage() {
         {filtered.length === 0 && (
           <div className="col-span-full glass-card rounded-2xl p-12 text-center">
             <ImageIcon className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-400 font-medium">No images found</p>
+            <p className="text-slate-400 font-medium">No gallery items yet</p>
+            <p className="text-slate-600 text-sm mt-2">
+              The backend does not currently expose a gallery endpoint or image storage feed.
+            </p>
           </div>
         )}
       </div>
 
-      {/* Lightbox */}
       {selected && selectedImage && (
         <div
           className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"

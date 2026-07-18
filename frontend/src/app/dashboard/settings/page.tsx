@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User, Bell, Key, Palette, Save, Check } from "lucide-react";
 import Input from "@/components/Input";
+import { authApi } from "@/lib/api";
 
 const tabs = [
   { id: "profile", label: "Profile", icon: User },
@@ -11,20 +12,76 @@ const tabs = [
   { id: "appearance", label: "Appearance", icon: Palette },
 ];
 
+const DEFAULT_NOTIFICATIONS = {
+  generation: true,
+  projects: true,
+  digest: false,
+  marketing: false,
+};
+
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
+  const [profileError, setProfileError] = useState("");
   const [profile, setProfile] = useState({
-    name: "Jane Doe",
-    email: "jane@example.com",
-    bio: "Creative director & AI enthusiast.",
+    name: "",
+    email: "",
+    bio: "",
   });
+  const [notifications, setNotifications] = useState(DEFAULT_NOTIFICATIONS);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadProfile() {
+      setLoadingProfile(true);
+      setProfileError("");
+      try {
+        const response = await authApi.me();
+        if (!mounted) return;
+        const data = response.data as { name: string; email: string; bio?: string | null };
+        setProfile({
+          name: data.name || "",
+          email: data.email || "",
+          bio: data.bio || "",
+        });
+      } catch (err: any) {
+        if (!mounted) return;
+        setProfileError(err?.response?.data?.detail || "Failed to load profile.");
+      } finally {
+        if (mounted) setLoadingProfile(false);
+      }
+    }
+
+    void loadProfile();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
-    await new Promise((r) => setTimeout(r, 800));
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+    setSaving(true);
+    setProfileError("");
+    try {
+      const response = await authApi.updateMe({
+        name: profile.name,
+        bio: profile.bio,
+      });
+      const data = response.data as { name: string; email: string; bio?: string | null };
+      setProfile((current) => ({
+        ...current,
+        name: data.name || current.name,
+        bio: data.bio || "",
+      }));
+      setSaved(true);
+    } catch (err: any) {
+      setProfileError(err?.response?.data?.detail || "Failed to save profile.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -53,6 +110,12 @@ export default function SettingsPage() {
         ))}
       </div>
 
+      {profileError && (
+        <div className="glass-card rounded-2xl px-4 py-3 text-sm text-red-300 border border-red-500/20">
+          {profileError}
+        </div>
+      )}
+
       {/* Profile tab */}
       {activeTab === "profile" && (
         <div className="glass-card rounded-2xl p-6">
@@ -61,7 +124,7 @@ export default function SettingsPage() {
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl font-bold text-white"
                 style={{ background: "linear-gradient(135deg,#7c3aed,#2563eb)" }}>
-                J
+                {profile.name ? profile.name.charAt(0).toUpperCase() : "?"}
               </div>
               <div>
                 <button type="button" className="btn-secondary text-xs px-4 py-2">
@@ -76,12 +139,13 @@ export default function SettingsPage() {
                 label="Full name"
                 value={profile.name}
                 onChange={(e) => setProfile((p) => ({ ...p, name: e.target.value }))}
+                disabled={loadingProfile}
               />
               <Input
                 label="Email address"
                 type="email"
                 value={profile.email}
-                onChange={(e) => setProfile((p) => ({ ...p, email: e.target.value }))}
+                readOnly
               />
             </div>
 
@@ -96,12 +160,14 @@ export default function SettingsPage() {
             </div>
 
             <div className="pt-2 flex justify-end">
-              <button type="submit" className="btn-primary px-6">
+              <button type="submit" className="btn-primary px-6" disabled={saving || loadingProfile}>
                 {saved ? (
                   <>
                     <Check className="w-4 h-4" />
                     Saved!
                   </>
+                ) : saving ? (
+                  "Saving..."
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
@@ -118,12 +184,12 @@ export default function SettingsPage() {
       {activeTab === "notifications" && (
         <div className="glass-card rounded-2xl p-6 space-y-4">
           {[
-            { label: "Generation complete", desc: "Notify when an AI generation finishes", default: true },
-            { label: "Project updates", desc: "Collaborator activity in your projects", default: true },
-            { label: "Weekly digest", desc: "Summary of your usage and new features", default: false },
-            { label: "Marketing emails", desc: "Product announcements and promotions", default: false },
+            { key: "generation", label: "Generation complete", desc: "Notify when an AI generation finishes" },
+            { key: "projects", label: "Project updates", desc: "Collaborator activity in your projects" },
+            { key: "digest", label: "Weekly digest", desc: "Summary of your usage and new features" },
+            { key: "marketing", label: "Marketing emails", desc: "Product announcements and promotions" },
           ].map((item) => {
-            const [checked, setChecked] = useState(item.default);
+            const checked = notifications[item.key as keyof typeof notifications];
             return (
               <div key={item.label} className="flex items-center justify-between py-3 border-b border-white/5 last:border-0">
                 <div>
@@ -132,7 +198,12 @@ export default function SettingsPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setChecked(!checked)}
+                  onClick={() =>
+                    setNotifications((current) => ({
+                      ...current,
+                      [item.key]: !current[item.key as keyof typeof current],
+                    }))
+                  }
                   className={`w-11 h-6 rounded-full transition-all duration-200 relative ${checked ? "" : "bg-white/10"}`}
                   style={checked ? { background: "linear-gradient(135deg,#7c3aed,#2563eb)" } : undefined}
                 >

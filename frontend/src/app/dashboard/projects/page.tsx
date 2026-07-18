@@ -1,33 +1,88 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus, Search, FolderOpen, Trash2, ArrowRight, Clock } from "lucide-react";
 import Badge from "@/components/Badge";
 import Link from "next/link";
+import { projectsApi } from "@/lib/api";
+
+type ProjectStatus = "active" | "completed" | "draft";
 
 type Project = {
   id: string;
   name: string;
   description: string;
-  status: "active" | "completed" | "draft";
+  status: ProjectStatus;
   count: number;
   updatedAt: string;
 };
 
-const initialProjects: Project[] = [
-  { id: "1", name: "Brand Campaign v2", description: "Marketing visuals for Q1 2025 launch", status: "active", count: 34, updatedAt: "2 hours ago" },
-  { id: "2", name: "Product Renders", description: "3D-style product shots for e-commerce", status: "active", count: 18, updatedAt: "Yesterday" },
-  { id: "3", name: "Social Media Pack", description: "Instagram & LinkedIn templates", status: "completed", count: 52, updatedAt: "3 days ago" },
-  { id: "4", name: "UI Illustrations", description: "Custom illustration set for SaaS product", status: "draft", count: 9, updatedAt: "1 week ago" },
-  { id: "5", name: "Ad Creatives", description: "Google & Meta display ads", status: "active", count: 27, updatedAt: "4 hours ago" },
-  { id: "6", name: "Logo Explorations", description: "Brand identity variants", status: "draft", count: 5, updatedAt: "2 weeks ago" },
-];
+type BackendProject = {
+  id: string;
+  title: string;
+  description?: string | null;
+  status: ProjectStatus;
+  scene_count: number;
+  updated_at: string;
+};
+
+function formatRelativeDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Just now";
+  const diff = Date.now() - date.getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return date.toLocaleDateString();
+}
+
+function toUiProject(project: BackendProject): Project {
+  return {
+    id: project.id,
+    name: project.title,
+    description: project.description || "No description yet.",
+    status: project.status,
+    count: project.scene_count,
+    updatedAt: formatRelativeDate(project.updated_at),
+  };
+}
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [newProject, setNewProject] = useState({ name: "", description: "" });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadProjects() {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await projectsApi.list({ limit: 100 });
+        if (!mounted) return;
+        setProjects((response.data.items as BackendProject[]).map(toUiProject));
+      } catch (err: any) {
+        if (!mounted) return;
+        setError(err?.response?.data?.detail || "Failed to load projects.");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+
+    void loadProjects();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const filtered = projects.filter(
     (p) =>
@@ -35,23 +90,34 @@ export default function ProjectsPage() {
       p.description.toLowerCase().includes(search.toLowerCase())
   );
 
-  function createProject() {
-    if (!newProject.name.trim()) return;
-    const project: Project = {
-      id: String(Date.now()),
-      name: newProject.name,
-      description: newProject.description,
-      status: "draft",
-      count: 0,
-      updatedAt: "Just now",
-    };
-    setProjects((prev) => [project, ...prev]);
-    setNewProject({ name: "", description: "" });
-    setShowModal(false);
+  async function createProject() {
+    if (!newProject.name.trim() || saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      const response = await projectsApi.create({
+        title: newProject.name.trim(),
+        description: newProject.description.trim() || undefined,
+        status: "draft",
+      });
+      setProjects((prev) => [toUiProject(response.data as BackendProject), ...prev]);
+      setNewProject({ name: "", description: "" });
+      setShowModal(false);
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || "Failed to create project.");
+    } finally {
+      setSaving(false);
+    }
   }
 
-  function deleteProject(id: string) {
-    setProjects((prev) => prev.filter((p) => p.id !== id));
+  async function deleteProject(id: string) {
+    setError("");
+    try {
+      await projectsApi.delete(id);
+      setProjects((prev) => prev.filter((p) => p.id !== id));
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || "Failed to delete project.");
+    }
   }
 
   return (
@@ -68,6 +134,12 @@ export default function ProjectsPage() {
         </button>
       </div>
 
+      {error && (
+        <div className="glass-card rounded-2xl px-4 py-3 text-sm text-red-300 border border-red-500/20">
+          {error}
+        </div>
+      )}
+
       {/* Search */}
       <div className="flex items-center gap-2 glass-card rounded-xl px-4 py-3 max-w-sm">
         <Search className="w-4 h-4 text-slate-500 flex-shrink-0" />
@@ -81,49 +153,55 @@ export default function ProjectsPage() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filtered.map((project) => (
-          <div key={project.id} className="glass-card rounded-2xl p-5 flex flex-col gap-4 group hover:border-purple-500/30 transition-all duration-200 hover:-translate-y-0.5">
-            <div className="flex items-start justify-between">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/20">
-                <FolderOpen className="w-5 h-5 text-purple-400" />
-              </div>
-              <Badge variant={project.status === "active" ? "green" : project.status === "completed" ? "blue" : "default"}>
-                {project.status}
-              </Badge>
-            </div>
-
-            <div className="flex-1">
-              <h3 className="text-white font-semibold mb-1">{project.name}</h3>
-              <p className="text-slate-500 text-sm line-clamp-2">{project.description}</p>
-            </div>
-
-            <div className="flex items-center justify-between text-xs text-slate-500">
-              <span>{project.count} images</span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {project.updatedAt}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 pt-2 border-t border-white/5">
-              <Link
-                href={`/dashboard/projects/${project.id}`}
-                className="flex-1 flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-white py-2 rounded-lg hover:bg-white/5 transition-colors"
-              >
-                Open <ArrowRight className="w-3 h-3" />
-              </Link>
-              <button
-                onClick={() => deleteProject(project.id)}
-                className="p-2 text-slate-500 hover:text-red-400 rounded-lg hover:bg-red-500/5 transition-colors"
-                title="Delete project"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-              </button>
-            </div>
+        {loading ? (
+          <div className="col-span-full glass-card rounded-2xl p-12 text-center">
+            <p className="text-slate-400 font-medium">Loading projects from the backend...</p>
           </div>
-        ))}
+        ) : (
+          filtered.map((project) => (
+            <div key={project.id} className="glass-card rounded-2xl p-5 flex flex-col gap-4 group hover:border-purple-500/30 transition-all duration-200 hover:-translate-y-0.5">
+              <div className="flex items-start justify-between">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500/20 to-blue-500/20 flex items-center justify-center border border-purple-500/20">
+                  <FolderOpen className="w-5 h-5 text-purple-400" />
+                </div>
+                <Badge variant={project.status === "active" ? "green" : project.status === "completed" ? "blue" : "default"}>
+                  {project.status}
+                </Badge>
+              </div>
 
-        {filtered.length === 0 && (
+              <div className="flex-1">
+                <h3 className="text-white font-semibold mb-1">{project.name}</h3>
+                <p className="text-slate-500 text-sm line-clamp-2">{project.description}</p>
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-slate-500">
+                <span>{project.count} scenes</span>
+                <span className="flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  {project.updatedAt}
+                </span>
+              </div>
+
+              <div className="flex items-center gap-2 pt-2 border-t border-white/5">
+                <Link
+                  href={`/dashboard/projects/${project.id}`}
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs text-slate-400 hover:text-white py-2 rounded-lg hover:bg-white/5 transition-colors"
+                >
+                  Open <ArrowRight className="w-3 h-3" />
+                </Link>
+                <button
+                  onClick={() => deleteProject(project.id)}
+                  className="p-2 text-slate-500 hover:text-red-400 rounded-lg hover:bg-red-500/5 transition-colors"
+                  title="Delete project"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+
+        {!loading && filtered.length === 0 && (
           <div className="col-span-full glass-card rounded-2xl p-12 text-center">
             <FolderOpen className="w-10 h-10 text-slate-600 mx-auto mb-3" />
             <p className="text-slate-400 font-medium mb-1">No projects found</p>
@@ -166,11 +244,11 @@ export default function ProjectsPage() {
                 </button>
                 <button
                   onClick={createProject}
-                  disabled={!newProject.name.trim()}
+                  disabled={!newProject.name.trim() || saving}
                   className="btn-primary flex-1 justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Plus className="w-4 h-4" />
-                  Create
+                  {saving ? "Creating..." : "Create"}
                 </button>
               </div>
             </div>

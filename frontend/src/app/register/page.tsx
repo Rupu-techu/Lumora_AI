@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, User, Sparkles, ArrowRight, Loader2, Check } from "lucide-react";
 import Input from "@/components/Input";
+import { authApi } from "@/lib/api";
 
 const passwordRules = [
   { label: "At least 8 characters", test: (p: string) => p.length >= 8 },
@@ -38,12 +39,12 @@ export default function RegisterPage() {
     setLoading(true);
     setApiError("");
     try {
-      // Demo: simulate API call
-      await new Promise((r) => setTimeout(r, 1400));
-      localStorage.setItem("lumora_token", "demo_token");
+      const response = await authApi.register(form.name, form.email, form.password);
+      localStorage.setItem("lumora_token", response.data.access_token);
+      localStorage.setItem("lumora_refresh_token", response.data.refresh_token);
       router.push("/dashboard");
-    } catch {
-      setApiError("Something went wrong. Please try again.");
+    } catch (err: any) {
+      setApiError(err?.response?.data?.detail || "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }

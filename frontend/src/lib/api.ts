@@ -49,8 +49,34 @@ export default api;
 // ─── Shared types ────────────────────────────────────────────────────────────
 
 export interface Pagination {
+  skip?: number;
+  limit?: number;
   page?: number;
   size?: number;
+}
+
+function normalizePagination<T extends Pagination>(params?: T) {
+  if (!params) return undefined;
+
+  const { page, size, skip, limit, ...rest } = params;
+  const normalizedSkip =
+    typeof skip === "number"
+      ? skip
+      : typeof page === "number" && typeof size === "number"
+        ? Math.max(0, (page - 1) * size)
+        : undefined;
+  const normalizedLimit =
+    typeof limit === "number"
+      ? limit
+      : typeof size === "number"
+        ? size
+        : undefined;
+
+  return {
+    ...rest,
+    ...(normalizedSkip !== undefined ? { skip: normalizedSkip } : {}),
+    ...(normalizedLimit !== undefined ? { limit: normalizedLimit } : {}),
+  };
 }
 
 // ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -83,22 +109,22 @@ export const authApi = {
 // ─── Projects ─────────────────────────────────────────────────────────────────
 
 export interface ProjectCreate {
-  name: string;
+  title: string;
   description?: string;
   genre?: string;
-  tags?: string[];
+  status?: "draft" | "active" | "completed" | "archived";
 }
 
 export interface ProjectUpdate {
-  name?: string;
+  title?: string;
   description?: string;
   genre?: string;
-  tags?: string[];
+  status?: "draft" | "active" | "completed" | "archived";
 }
 
 export const projectsApi = {
   list: (params?: Pagination & { search?: string; genre?: string }) =>
-    api.get("/api/projects", { params }),
+    api.get("/api/projects", { params: normalizePagination(params) }),
 
   create: (payload: ProjectCreate) =>
     api.post("/api/projects", payload),
@@ -107,7 +133,7 @@ export const projectsApi = {
     api.get(`/api/projects/${id}`),
 
   update: (id: string, payload: ProjectUpdate) =>
-    api.patch(`/api/projects/${id}`, payload),
+    api.put(`/api/projects/${id}`, payload),
 
   delete: (id: string) =>
     api.delete(`/api/projects/${id}`),
@@ -120,27 +146,27 @@ export const projectsApi = {
 
 export interface StoryCreate {
   title: string;
+  content?: string;
   genre?: string;
   tone?: string;
   pov?: string;
-  target_length?: number;
-  synopsis?: string;
+  act?: string;
 }
 
 export interface StoryGenerateRequest {
   project_id: string;
-  title: string;
+  prompt: string;
   genre?: string;
   tone?: string;
   pov?: string;
-  target_length?: number;
-  synopsis?: string;
-  style_notes?: string;
+  length?: "short" | "medium" | "long" | "epic";
+  model?: string;
+  save?: boolean;
 }
 
 export const storiesApi = {
   list: (projectId: string, params?: Pagination) =>
-    api.get(`/api/projects/${projectId}/stories`, { params }),
+    api.get(`/api/projects/${projectId}/stories`, { params: normalizePagination(params) }),
 
   create: (projectId: string, payload: StoryCreate) =>
     api.post(`/api/projects/${projectId}/stories`, payload),
@@ -163,27 +189,24 @@ export const storiesApi = {
 export interface CharacterCreate {
   name: string;
   role?: string;
-  age?: number;
-  traits?: string[];
+  age?: string;
+  gender?: string;
   appearance?: string;
-  motivation?: string;
+  personality?: string;
   backstory?: string;
+  motivations?: string;
+  flaws?: string;
 }
 
 export interface CharacterGenerateRequest {
-  project_id: string;
-  name: string;
-  role?: string;
-  age?: number;
-  traits?: string[];
-  appearance?: string;
-  motivation?: string;
-  style_notes?: string;
+  character_id: string;
+  style?: "brief" | "detailed" | "dramatic";
+  model?: string;
 }
 
 export const charactersApi = {
   list: (projectId: string, params?: Pagination) =>
-    api.get(`/api/projects/${projectId}/characters`, { params }),
+    api.get(`/api/projects/${projectId}/characters`, { params: normalizePagination(params) }),
 
   create: (projectId: string, payload: CharacterCreate) =>
     api.post(`/api/projects/${projectId}/characters`, payload),
@@ -201,37 +224,36 @@ export const charactersApi = {
     api.delete(`/api/projects/${projectId}/characters/${characterId}`),
 
   generateBackstory: (characterId: string, payload: CharacterGenerateRequest) =>
-    api.post(`/api/characters/${characterId}/generate-backstory`, payload),
+    api.post(`/api/characters/${characterId}/generate-backstory`, {
+      character_id: characterId,
+      style: payload.style,
+      model: payload.model,
+    }),
 };
 
 // ─── Worlds ───────────────────────────────────────────────────────────────────
 
 export interface WorldCreate {
   name: string;
-  genre?: string;
-  climate?: string;
+  description?: string;
+  geography?: string;
+  cultures?: string;
+  history?: string;
   magic_system?: string;
   technology_level?: string;
-  overview?: string;
-  history?: string;
-  geography?: string;
-  factions?: string;
-  economy?: string;
+  notable_locations?: string[];
 }
 
 export interface WorldGenerateRequest {
   project_id: string;
-  name: string;
-  genre?: string;
-  climate?: string;
-  magic_system?: string;
-  technology_level?: string;
-  style_notes?: string;
+  concept: string;
+  sections?: string[];
+  model?: string;
 }
 
 export const worldsApi = {
   list: (projectId: string, params?: Pagination) =>
-    api.get(`/api/projects/${projectId}/worlds`, { params }),
+    api.get(`/api/projects/${projectId}/worlds`, { params: normalizePagination(params) }),
 
   create: (projectId: string, payload: WorldCreate) =>
     api.post(`/api/projects/${projectId}/worlds`, payload),
@@ -248,8 +270,8 @@ export const worldsApi = {
   generate: (payload: WorldGenerateRequest) =>
     api.post("/api/worlds/generate", payload),
 
-  expandSection: (worldId: string, section: string) =>
-    api.patch(`/api/worlds/${worldId}/expand/${section}`),
+  expandSection: (worldId: string, section: string, params?: { concept?: string; model?: string }) =>
+    api.patch(`/api/worlds/${worldId}/expand/${section}`, undefined, { params }),
 };
 
 // ─── Prompts ──────────────────────────────────────────────────────────────────
@@ -258,19 +280,22 @@ export interface PromptCreate {
   title: string;
   content: string;
   category?: string;
-  tags?: string[];
   is_public?: boolean;
+  model?: string;
+  project_id?: string;
+  is_favourite?: boolean;
 }
 
 export interface PromptEnhanceRequest {
-  content: string;
+  prompt_id?: string | null;
+  content?: string | null;
   style?: string;
-  target_model?: string;
+  model?: string;
 }
 
 export const promptsApi = {
   list: (params?: Pagination & { category?: string; search?: string }) =>
-    api.get("/api/prompts", { params }),
+    api.get("/api/prompts", { params: normalizePagination(params) }),
 
   create: (payload: PromptCreate) =>
     api.post("/api/prompts", payload),
@@ -296,9 +321,10 @@ export const promptsApi = {
 export interface GraniteGenerateRequest {
   prompt: string;
   model?: string;
-  max_tokens?: number;
+  max_new_tokens?: number;
   temperature?: number;
-  system_prompt?: string;
+  top_p?: number;
+  stream?: boolean;
 }
 
 export const graniteApi = {
@@ -313,7 +339,7 @@ export const graniteApi = {
     const base = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
     const params = new URLSearchParams({ prompt: payload.prompt });
     if (payload.model)       params.set("model", payload.model);
-    if (payload.max_tokens)  params.set("max_tokens", String(payload.max_tokens));
+    if (payload.max_new_tokens)  params.set("max_new_tokens", String(payload.max_new_tokens));
     if (payload.temperature) params.set("temperature", String(payload.temperature));
     return `${base}/api/granite/generate/stream?${params.toString()}`;
   },

@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { authApi } from "@/lib/api";
 
 /* ── Nav structure ─────────────────────────────────────── */
 const navGroups = [
@@ -108,9 +109,22 @@ export default function DashboardSidebar({
   const router   = useRouter();
   const [collapsed, setCollapsed] = useState(false);
 
-  function handleLogout() {
-    if (typeof window !== "undefined") localStorage.removeItem("lumora_token");
-    router.push("/login");
+  async function handleLogout() {
+    const refreshToken = typeof window !== "undefined"
+      ? localStorage.getItem("lumora_refresh_token") || undefined
+      : undefined;
+
+    try {
+      if (refreshToken) {
+        await authApi.logout(refreshToken);
+      }
+    } finally {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("lumora_token");
+        localStorage.removeItem("lumora_refresh_token");
+      }
+      router.push("/login");
+    }
   }
 
   const sidebarContent = (isMobile = false) => (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -10,6 +10,7 @@ import {
   ChevronRight, X, Download,
 } from "lucide-react";
 import Badge from "@/components/Badge";
+import { projectsApi } from "@/lib/api";
 
 /* ─── types ─── */
 type ProjectStatus = "active" | "completed" | "draft";
@@ -17,6 +18,19 @@ type Project = {
   id: string; name: string; description: string;
   status: ProjectStatus; scenes: number; characters: number;
   updatedAt: string; color: string; tag: string;
+};
+
+type BackendProject = {
+  id: string;
+  title: string;
+  description?: string | null;
+  genre?: string | null;
+  status: ProjectStatus;
+  scene_count: number;
+  character_count: number;
+  word_count: number;
+  created_at: string;
+  updated_at: string;
 };
 
 /* ─── data ─── */
@@ -35,18 +49,44 @@ const STATS = [
   { label: "AI generations",  value: "3.2K",delta: "+34%",          icon: Sparkles,    color: "text-amber-400",  bg: "from-amber-500/20 to-amber-500/5"   },
 ];
 
-const INITIAL_PROJECTS: Project[] = [
-  { id: "1", name: "The Hollow Crown",      description: "A dark fantasy epic about a kingdom lost to shadow magic.", status: "active",    scenes: 14, characters: 6,  updatedAt: "2 hours ago",  color: "#7c3aed", tag: "Fantasy"   },
-  { id: "2", name: "Project Nebula",        description: "Sci-fi thriller set aboard a derelict space freighter.",    status: "active",    scenes: 8,  characters: 4,  updatedAt: "Yesterday",    color: "#2563eb", tag: "Sci-Fi"    },
-  { id: "3", name: "Red Door Chronicles",   description: "Anthology of mystery short stories set in 1920s London.",   status: "completed", scenes: 22, characters: 11, updatedAt: "3 days ago",   color: "#db2777", tag: "Mystery"   },
-  { id: "4", name: "Iron Bloom",            description: "Coming-of-age drama about a young blacksmith in feudal Japan.", status: "draft", scenes: 3,  characters: 2,  updatedAt: "1 week ago",   color: "#0891b2", tag: "Drama"     },
-  { id: "5", name: "Glass Meridian",        description: "Psychological thriller with an unreliable narrator.",        status: "active",    scenes: 11, characters: 5,  updatedAt: "4 hours ago",  color: "#d97706", tag: "Thriller"  },
-  { id: "6", name: "Ember & Ash",           description: "Post-apocalyptic romance with magical realism elements.",    status: "draft",     scenes: 2,  characters: 3,  updatedAt: "2 weeks ago",  color: "#059669", tag: "Romance"   },
-];
-
 const STATUS_BADGE: Record<ProjectStatus, "green" | "blue" | "default"> = {
   active: "green", completed: "blue", draft: "default",
 };
+
+function pickColor(seed: string) {
+  const colors = ["#7c3aed", "#2563eb", "#db2777", "#0891b2", "#d97706", "#059669"];
+  let hash = 0;
+  for (let i = 0; i < seed.length; i += 1) hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
+  return colors[hash % colors.length];
+}
+
+function formatRelativeDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Just now";
+  const diff = Date.now() - date.getTime();
+  const minutes = Math.floor(diff / 60000);
+  if (minutes < 1) return "Just now";
+  if (minutes < 60) return `${minutes}m ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h ago`;
+  const days = Math.floor(hours / 24);
+  if (days < 7) return `${days}d ago`;
+  return date.toLocaleDateString();
+}
+
+function toUiProject(project: BackendProject): Project {
+  return {
+    id: project.id,
+    name: project.title,
+    description: project.description || "No description yet.",
+    status: project.status,
+    scenes: project.scene_count,
+    characters: project.character_count,
+    updatedAt: formatRelativeDate(project.updated_at),
+    color: pickColor(project.title),
+    tag: project.genre || "Other",
+  };
+}
 
 /* ─── sub-components ─── */
 
@@ -250,23 +290,28 @@ function CreateModal({
   const [desc, setDesc]           = useState("");
   const [template, setTemplate]   = useState("blank");
   const [step, setStep]           = useState<1 | 2>(1);
+  const [saving, setSaving]       = useState(false);
+  const [error, setError]         = useState("");
 
-  function handleCreate() {
-    if (!name.trim()) return;
+  async function handleCreate() {
+    if (!name.trim() || saving) return;
     const tpl = TEMPLATES.find((t) => t.id === template)!;
-    const colors = ["#7c3aed","#2563eb","#db2777","#0891b2","#d97706","#059669"];
-    onCreate({
-      id: String(Date.now()),
-      name: name.trim(),
-      description: desc.trim() || tpl.desc,
-      status: "draft",
-      scenes: 0,
-      characters: 0,
-      updatedAt: "Just now",
-      color: colors[Math.floor(Math.random() * colors.length)],
-      tag: tpl.label === "Blank" ? "Other" : tpl.label,
-    });
-    onClose();
+    setSaving(true);
+    setError("");
+    try {
+      const response = await projectsApi.create({
+        title: name.trim(),
+        description: desc.trim() || tpl.desc,
+        genre: tpl.label === "Blank" ? undefined : tpl.label,
+        status: "draft",
+      });
+      onCreate(toUiProject(response.data as BackendProject));
+      onClose();
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || "Failed to create project.");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -382,13 +427,14 @@ function CreateModal({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleCreate}
-                  disabled={!name.trim()}
+                  disabled={!name.trim() || saving}
                   className="btn-primary flex-1 justify-center py-3 rounded-xl text-sm disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Sparkles className="w-4 h-4" />
-                  Create project
+                  {saving ? "Creating..." : "Create project"}
                 </motion.button>
               </div>
+              {error && <p className="text-sm text-red-400">{error}</p>}
             </motion.div>
           )}
         </AnimatePresence>
@@ -399,16 +445,45 @@ function CreateModal({
 
 /* ─── main page ─── */
 export default function DashboardPage() {
-  const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<"all" | ProjectStatus>("all");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadProjects() {
+      setLoading(true);
+      setError("");
+      try {
+        const response = await projectsApi.list({ limit: 100 });
+        if (!mounted) return;
+        setProjects((response.data.items as BackendProject[]).map(toUiProject));
+      } catch (err: any) {
+        if (!mounted) return;
+        setError(err?.response?.data?.detail || "Failed to load projects.");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    }
+    void loadProjects();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const filtered = activeFilter === "all"
     ? projects
     : projects.filter((p) => p.status === activeFilter);
 
-  function handleDelete(id: string) {
-    setProjects((prev) => prev.filter((p) => p.id !== id));
+  async function handleDelete(id: string) {
+    try {
+      await projectsApi.delete(id);
+      setProjects((prev) => prev.filter((p) => p.id !== id));
+    } catch (err: any) {
+      setError(err?.response?.data?.detail || "Failed to delete project.");
+    }
   }
 
   function handleCreate(p: Project) {
@@ -456,6 +531,12 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
         {STATS.map((s, i) => <StatCard key={s.label} {...s} delay={0.05 * i} />)}
       </div>
+
+      {error && (
+        <div className="glass-card rounded-2xl px-4 py-3 text-sm text-red-300 border border-red-500/20">
+          {error}
+        </div>
+      )}
 
       {/* ── Create CTA banner ── */}
       <motion.div
@@ -526,7 +607,17 @@ export default function DashboardPage() {
           </div>
 
           <AnimatePresence mode="popLayout">
-            {filtered.length > 0 ? (
+            {loading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="glass-card rounded-2xl p-12 text-center"
+              >
+                <p className="text-slate-400 font-medium">Loading projects from the backend...</p>
+              </motion.div>
+            ) : filtered.length > 0 ? (
               <motion.div
                 key="grid"
                 layout

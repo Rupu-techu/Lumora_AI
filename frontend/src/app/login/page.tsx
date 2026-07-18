@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Mail, Lock, Sparkles, ArrowRight, Loader2 } from "lucide-react";
 import Input from "@/components/Input";
+import { authApi } from "@/lib/api";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -29,12 +30,12 @@ export default function LoginPage() {
     setLoading(true);
     setApiError("");
     try {
-      // Demo: simulate API call, then redirect to dashboard
-      await new Promise((r) => setTimeout(r, 1200));
-      localStorage.setItem("lumora_token", "demo_token");
+      const response = await authApi.login(form.email, form.password);
+      localStorage.setItem("lumora_token", response.data.access_token);
+      localStorage.setItem("lumora_refresh_token", response.data.refresh_token);
       router.push("/dashboard");
-    } catch {
-      setApiError("Invalid credentials. Please try again.");
+    } catch (err: any) {
+      setApiError(err?.response?.data?.detail || "Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
