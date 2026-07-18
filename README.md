@@ -1,139 +1,152 @@
-# Lumora AI
+<div align="center">
 
-A modern full-stack AI web application built with **Next.js 15**, **TypeScript**, **Tailwind CSS**, and **FastAPI** — powered by **IBM Granite** foundation models.
+# 🌌 Lumora AI
+
+### **Create Beyond Imagination with AI**
+
+*An AI-powered creative workspace that transforms ideas into stories, characters, worlds, and immersive creative experiences using IBM Granite.*
+
+<p align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)
+![IBM Granite](https://img.shields.io/badge/IBM-Granite-1261FE?style=for-the-badge)
+![IBM Bob](https://img.shields.io/badge/Built%20with-IBM%20Bob-6929C4?style=for-the-badge)
+
+</p>
 
 ---
 
-## 🗂 Project Structure
+### 🚀 AI Builders Challenge 2026
+### 🎨 Theme: Creative Industries
+
+**Turning imagination into creation with AI.**
+
+</div>
+
+---
+
+# 📖 Overview
+
+Lumora AI is an intelligent creative workspace designed to help creators transform ideas into fully developed creative projects.
+
+Instead of switching between multiple AI tools for writing, brainstorming, character design, and world-building, Lumora AI brings everything into one unified platform powered by IBM Granite.
+
+Whether you're a writer, game designer, filmmaker, student, or content creator, Lumora AI acts as an AI creative partner that accelerates ideation while keeping humans at the center of creativity.
+
+---
+
+# ❗ Problem Statement
+
+Creative professionals often struggle with fragmented workflows.
+
+Generating stories, designing characters, organizing projects, brainstorming ideas, and refining content usually require multiple disconnected tools.
+
+This leads to:
+
+- Creative blocks
+- Context switching
+- Slow production
+- Inconsistent workflows
+- Lost ideas
+
+Creators need an intelligent AI partner that understands their creative process instead of simply generating text.
+
+---
+
+# 💡 Our Solution
+
+Lumora AI provides an end-to-end AI-powered creative workspace where users can:
+
+- ✨ Brainstorm ideas
+- 📚 Generate stories
+- 👤 Design characters
+- 🌍 Build immersive worlds
+- 🎬 Organize creative projects
+- 💾 Save and manage AI-generated content
+- 🤖 Collaborate with IBM Granite as a creative partner
+
+---
+
+# ✨ Key Features
+
+## 🧠 AI Story Generation
+
+Generate structured stories from simple prompts.
+
+---
+
+## 👤 Character Creator
+
+Create rich characters including:
+
+- Personality
+- Motivation
+- Background
+- Appearance
+- Relationships
+
+---
+
+## 🌍 World Builder
+
+Generate immersive environments, civilizations, locations, cultures, and lore.
+
+---
+
+## 📁 Project Workspace
+
+Organize all creative assets in one place.
+
+---
+
+## 💾 Cloud Project Management
+
+Store creative projects securely using MongoDB Atlas.
+
+---
+
+## 🎨 Modern Creative Dashboard
+
+Beautiful responsive interface built with:
+
+- Next.js
+- React
+- Tailwind CSS
+- TypeScript
+
+---
+
+## 🔒 Secure Authentication
+
+User authentication with protected creative workspaces.
+
+---
+
+# 🏗 Architecture
 
 ```
-lumora-ai/
-├── frontend/                  # Next.js 15 + TypeScript + Tailwind CSS
-│   ├── src/
-│   │   ├── app/
-│   │   │   ├── layout.tsx            # Root layout (dark theme)
-│   │   │   ├── page.tsx              # Landing page
-│   │   │   ├── login/page.tsx        # Sign-in
-│   │   │   ├── register/page.tsx     # Sign-up
-│   │   │   └── dashboard/
-│   │   │       ├── layout.tsx        # Sidebar + Topbar shell
-│   │   │       ├── page.tsx          # Dashboard overview
-│   │   │       ├── projects/page.tsx # Project management
-│   │   │       ├── generate/page.tsx # AI Studio
-│   │   │       ├── gallery/page.tsx  # Image gallery
-│   │   │       └── settings/page.tsx # Account settings
-│   │   ├── components/
-│   │   │   ├── Navbar.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   ├── FeatureCard.tsx
-│   │   │   ├── WorkflowStep.tsx
-│   │   │   ├── Badge.tsx
-│   │   │   ├── Input.tsx
-│   │   │   ├── DashboardSidebar.tsx
-│   │   │   └── DashboardTopbar.tsx
-│   │   └── lib/
-│   │       ├── api.ts                # Axios client + typed API helpers
-│   │       └── utils.ts              # cn(), formatDate(), truncate()
-│   ├── tailwind.config.ts
-│   ├── next.config.ts
-│   └── package.json
-│
-└── backend/                   # FastAPI + IBM Granite
-    ├── app/
-    │   ├── main.py                   # FastAPI app factory
-    │   ├── db.py                     # In-memory store (swap for real DB)
-    │   ├── schemas.py                # Pydantic request/response models
-    │   ├── core/
-    │   │   ├── config.py             # Pydantic-settings (reads .env)
-    │   │   └── security.py           # JWT + bcrypt helpers
-    │   ├── routers/
-    │   │   ├── auth.py               # /api/auth/* endpoints
-    │   │   ├── projects.py           # /api/projects/* endpoints
-    │   │   └── granite.py            # /api/granite/* AI endpoints
-    │   └── services/
-    │       └── granite.py            # IBM Watsonx async client
-    ├── requirements.txt
-    ├── run.py
-    └── .env.example
-```
 
----
-
-## 🚀 Getting Started
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev          # http://localhost:3000
-```
-
-### Backend
-
-```bash
-cd backend
-
-# Create & activate virtual environment
-python -m venv .venv
-# Windows:
-.venv\Scripts\activate
-# macOS/Linux:
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Edit .env and add your IBM Watsonx credentials
-
-# Run the API
-python run.py        # http://localhost:8000
-# Swagger UI → http://localhost:8000/docs
-```
-
----
-
-## 🤖 IBM Granite Integration
-
-The backend is pre-wired for **IBM Watsonx** via [`backend/app/services/granite.py`](backend/app/services/granite.py).
-
-Set the following in `backend/.env`:
-
-| Variable | Description |
-|---|---|
-| `WATSONX_API_KEY` | IBM Cloud API key |
-| `WATSONX_PROJECT_ID` | Watsonx project ID |
-| `WATSONX_URL` | Regional endpoint (default: `us-south`) |
-
-### Available endpoints
-
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/api/granite/generate` | Text generation (Granite 13B) |
-| `POST` | `/api/granite/generate/stream` | Streaming SSE text generation |
-| `POST` | `/api/granite/imagine` | Image generation stub (configure endpoint) |
-
----
-
-## 🎨 Design System
-
-- **Dark theme** with `#0d0d1a` base
-- **Purple → Blue gradient** accents (`#7c3aed` → `#2563eb`)
-- **Glass-morphism** cards with backdrop blur
-- **Inter** font family
-- Fully **responsive** — mobile-first with sidebar collapse
-
----
-
-## 🔐 Auth
-
-JWT-based authentication with bcrypt password hashing.  
-Tokens are stored in `localStorage` and attached via an Axios request interceptor.
-
----
-
-## 📄 License
-
-MIT © Lumora AI
+                    +----------------------+
+                    |      Frontend        |
+                    |  Next.js + React     |
+                    +----------+-----------+
+                               |
+                               |
+                         REST APIs
+                               |
+                               |
+                    +----------v-----------+
+                    |      FastAPI         |
+                    |  Backend Services    |
+                    +----------+-----------+
+                               |
+          +--------------------+-------------------+
+          |                                        |
+          |                                        |
++---------v----------+                  +----------v---------+
+|    IBM Granite     |                  |   MongoDB Atlas    |
+| AI Content Engine  |                  | Project Storage    |
++--------------------+                  +--------------------+
