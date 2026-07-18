@@ -178,16 +178,17 @@ IBM Bob significantly accelerated development while maintaining a clean and modu
 
 # 🧠 IBM Granite Integration
 
-IBM Granite powers Lumora AI's creative intelligence.
+Lumora AI is architected for IBM Granite integration.
 
-It enables:
+The application includes a dedicated AI service layer designed to seamlessly connect with IBM Granite Foundation Models for:
 
 - Story Generation
-- Character Generation
+- Character Creation
 - World Building
 - Creative Brainstorming
-- Content Expansion
-- Intelligent AI Assistance
+- Intelligent Content Expansion
+
+Currently, AI responses are demonstrated using mock data, allowing the complete creative workflow to be tested while keeping the architecture ready for IBM Granite integration.
 
 ---
 
