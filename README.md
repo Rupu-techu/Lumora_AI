@@ -214,3 +214,80 @@ Lumora-AI/
 ├── assets/
 ├── README.md
 └── LICENSE
+```
+# 🚀 Installation
+```
+Clone Repository
+git clone https://github.com/Rupu-techu/Lumora_AI.git
+Frontend
+cd frontend
+
+npm install
+
+npm run dev
+Backend
+cd backend
+
+pip install -r requirements.txt
+
+uvicorn app.main:app --reload
+⚙ Environment Variables
+MONGODB_URI=
+
+DATABASE_NAME=
+
+IBM_GRANITE_API_KEY=
+
+IBM_PROJECT_ID=
+
+IBM_REGION=
+
+```
+## 🎯 Future Scope
+AI Image Generation
+Storyboard Generator
+Team Collaboration
+Version History
+Voice Storytelling
+AI Comics
+AI Game Narrative Designer
+Plugin Marketplace
+Creative Templates
+```
+```
+## 📊 Challenge Alignment
+
+✅ Creative Industries
+
+✅ AI-powered Creative Partner
+
+✅ Storytelling Platform
+
+✅ Creative Ideation
+
+✅ IBM Bob
+
+✅ IBM Granite
+
+```
+```
+👨‍💻 Team
+
+Team Name
+
+Lumora AI
+
+Developed by
+
+Rupsha Debnath
+
+
+
+---
+
+<div align="center">
+⭐ If you found Lumora AI inspiring, consider giving this repository a star!
+
+Made with ❤️ using IBM Bob, IBM Granite, FastAPI, MongoDB Atlas, and Next.js.
+
+</div> ````
