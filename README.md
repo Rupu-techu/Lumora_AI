@@ -17,24 +17,45 @@
 
 </p>
 
----
+### 🚀 IBM SkillsBuild AI Builders Challenge 2026
 
-### 🚀 AI Builders Challenge 2026
-### 🎨 Theme: Creative Industries
+**Theme:** Creative Industries
 
-**Turning imagination into creation with AI.**
+*"Where imagination meets intelligent creation."*
 
 </div>
 
 ---
 
+# 📑 Table of Contents
+
+- Overview
+- Problem Statement
+- Why Lumora AI?
+- Features
+- Workflow
+- Architecture
+- Tech Stack
+- IBM Bob Contribution
+- IBM Granite Integration
+- Project Structure
+- Screenshots
+- Installation
+- Environment Variables
+- Future Scope
+- Challenge Alignment
+- Team
+- License
+
+---
+
 # 📖 Overview
 
-Lumora AI is an intelligent creative workspace designed to help creators transform ideas into fully developed creative projects.
+Lumora AI is an AI-powered creative workspace that helps creators transform a single idea into structured stories, memorable characters, immersive worlds, and organized creative projects.
 
-Instead of switching between multiple AI tools for writing, brainstorming, character design, and world-building, Lumora AI brings everything into one unified platform powered by IBM Granite.
+Instead of switching between multiple disconnected AI tools, Lumora AI provides one unified creative environment where ideation, organization, and AI assistance work together seamlessly.
 
-Whether you're a writer, game designer, filmmaker, student, or content creator, Lumora AI acts as an AI creative partner that accelerates ideation while keeping humans at the center of creativity.
+Whether you're a writer, game developer, filmmaker, designer, educator, or content creator, Lumora AI serves as your intelligent creative partner.
 
 ---
 
@@ -42,172 +63,150 @@ Whether you're a writer, game designer, filmmaker, student, or content creator, 
 
 Creative professionals often struggle with fragmented workflows.
 
-Generating stories, designing characters, organizing projects, brainstorming ideas, and refining content usually require multiple disconnected tools.
+Generating stories, brainstorming ideas, designing characters, organizing assets, and maintaining consistency typically requires several different tools.
 
-This leads to:
+This results in:
 
 - Creative blocks
-- Context switching
-- Slow production
-- Inconsistent workflows
+- Constant context switching
+- Slower production
 - Lost ideas
+- Inconsistent creative direction
 
-Creators need an intelligent AI partner that understands their creative process instead of simply generating text.
-
----
-
-# 💡 Our Solution
-
-Lumora AI provides an end-to-end AI-powered creative workspace where users can:
-
-- ✨ Brainstorm ideas
-- 📚 Generate stories
-- 👤 Design characters
-- 🌍 Build immersive worlds
-- 🎬 Organize creative projects
-- 💾 Save and manage AI-generated content
-- 🤖 Collaborate with IBM Granite as a creative partner
+Creators need an AI partner that understands the creative process rather than simply generating text.
 
 ---
 
-# ✨ Key Features
+# 💜 Why Lumora AI?
 
-## 🧠 AI Story Generation
+Unlike traditional AI chatbots, Lumora AI provides a structured creative workspace.
 
-Generate structured stories from simple prompts.
+It helps users:
 
----
-
-## 👤 Character Creator
-
-Create rich characters including:
-
-- Personality
-- Motivation
-- Background
-- Appearance
-- Relationships
+- Develop ideas
+- Organize projects
+- Build consistent characters
+- Generate immersive worlds
+- Collaborate with AI throughout the creative journey
 
 ---
 
+# ✨ Features
 
-## 🎨 Modern Creative Dashboard
-
-Beautiful responsive interface built with:
-
-- Next.js
-- React
-- Tailwind CSS
-- TypeScript
+- 🧠 AI Story Generation
+- 👤 Character Creator
+- 🌍 World Builder
+- 📚 Creative Workspace
+- 💾 Project Management
+- 🔒 Secure Authentication
+- ⚡ Fast Dashboard
+- 🤖 IBM Granite Integration
 
 ---
 
-## 🔒 Secure Authentication
+# 🔄 Workflow
 
-User authentication with protected creative workspaces.
+```text
+Idea
+   │
+   ▼
+AI Story Generation
+   │
+   ▼
+Character Creation
+   │
+   ▼
+World Building
+   │
+   ▼
+Project Workspace
+   │
+   ▼
+Save to MongoDB
+```
 
 ---
 
 # 🏗 Architecture
 
+```mermaid
+flowchart TD
+
+A[Next.js Frontend]
+B[FastAPI Backend]
+C[IBM Granite]
+D[MongoDB Atlas]
+
+A --> B
+B --> C
+B --> D
 ```
 
-                    +----------------------+
-                    |      Frontend        |
-                    |  Next.js + React     |
-                    +----------+-----------+
-                               |
-                               |
-                         REST APIs
-                               |
-                               |
-                    +----------v-----------+
-                    |      FastAPI         |
-                    |  Backend Services    |
-                    +----------+-----------+
-                               |
-          +--------------------+-------------------+
-          |                                        |
-          |                                        |
-+---------v----------+                  +----------v---------+
-|    IBM Granite     |                  |   MongoDB Atlas    |
-| AI Content Engine  |                  | Project Storage    |
-+--------------------+                  +--------------------+
-
-```
+---
 
 # 🛠 Tech Stack
-```
 
-Frontend
-Next.js 15
-React 19
-TypeScript
-Tailwind CSS
-Backend
-FastAPI
-Python
-Motor
-Database
-MongoDB Atlas
-AI
-IBM Granite Foundation Models
-Development
-IBM Bob
+| Category | Technologies |
+|-----------|--------------|
+| Frontend | Next.js 15, React 19, TypeScript, Tailwind CSS |
+| Backend | FastAPI, Python |
+| Database | MongoDB Atlas, Motor |
+| AI | IBM Granite |
+| Development | IBM Bob |
+| Deployment | Vercel, Render |
 
-```
+---
 
 # 🤖 IBM Bob Contribution
-```
 
-IBM Bob served as the primary AI-assisted development environment throughout the project.
+IBM Bob was used as the primary AI-assisted development tool throughout the project.
 
-It was used for:
+It contributed to:
 
-Frontend component generation
-Backend architecture
-FastAPI API development
-MongoDB integration
-Code refactoring
-UI improvements
-Bug fixing
-Development acceleration
+- Frontend development
+- Backend architecture
+- FastAPI APIs
+- MongoDB integration
+- Code optimization
+- Bug fixing
+- Documentation
+- UI refinement
 
-IBM Bob significantly reduced development time while helping maintain a clean and scalable architecture.
-```
+IBM Bob significantly accelerated development while maintaining a clean and modular architecture.
 
+---
 
 # 🧠 IBM Granite Integration
-```
 
 IBM Granite powers Lumora AI's creative intelligence.
 
 It enables:
 
-Story Generation
-Character Generation
-Creative Brainstorming
-World Building
-Content Expansion
-Intelligent Creative Assistance
-```
+- Story Generation
+- Character Generation
+- World Building
+- Creative Brainstorming
+- Content Expansion
+- Intelligent AI Assistance
+
+---
 
 # 📂 Project Structure
-```
 
+```text
 Lumora-AI/
 
 ├── frontend/
 │   ├── src/
-│   ├── components/
 │   ├── app/
+│   ├── components/
 │   └── public/
 │
 ├── backend/
 │   ├── app/
 │   ├── routes/
-│   ├── services/
 │   ├── models/
+│   ├── services/
 │   ├── database.py
 │   └── main.py
 │
@@ -215,23 +214,72 @@ Lumora-AI/
 ├── README.md
 └── LICENSE
 ```
+
+---
+
+# 📸 Screenshots
+
+## Landing Page
+
+> Add Screenshot Here
+
+---
+
+## Dashboard
+
+> Add Screenshot Here
+
+---
+
+## AI Workspace
+
+> Add Screenshot Here
+
+---
+
+## Story Generator
+
+> Add Screenshot Here
+
+---
+
+## Character Creator
+
+> Add Screenshot Here
+
+---
+
 # 🚀 Installation
-```
-Clone Repository
+
+## Clone the Repository
+
+```bash
 git clone https://github.com/Rupu-techu/Lumora_AI.git
-Frontend
+```
+
+## Frontend
+
+```bash
 cd frontend
-
 npm install
-
 npm run dev
-Backend
+```
+
+## Backend
+
+```bash
 cd backend
-
 pip install -r requirements.txt
-
 uvicorn app.main:app --reload
-⚙ Environment Variables
+```
+
+---
+
+# ⚙ Environment Variables
+
+Create a `.env` file.
+
+```env
 MONGODB_URI=
 
 DATABASE_NAME=
@@ -241,25 +289,28 @@ IBM_GRANITE_API_KEY=
 IBM_PROJECT_ID=
 
 IBM_REGION=
+```
 
-```
-## 🎯 Future Scope
-AI Image Generation
-Storyboard Generator
-Team Collaboration
-Version History
-Voice Storytelling
-AI Comics
-AI Game Narrative Designer
-Plugin Marketplace
-Creative Templates
-```
-```
-## 📊 Challenge Alignment
+---
+
+# 🎯 Future Scope
+
+- AI Image Generation
+- Storyboard Generator
+- Team Collaboration
+- Voice Storytelling
+- AI Comics
+- AI Video Script Generator
+- Creative Templates
+- Plugin Marketplace
+
+---
+
+# 🏆 Challenge Alignment
 
 ✅ Creative Industries
 
-✅ AI-powered Creative Partner
+✅ AI Creative Partner
 
 ✅ Storytelling Platform
 
@@ -269,25 +320,30 @@ Creative Templates
 
 ✅ IBM Granite
 
-```
-```
-👨‍💻 Team
+---
 
-Team Name
+# 👨‍💻 Team
 
-Lumora AI
+**Lumora AI**
 
-Developed by
+Developed by:
 
-Rupsha Debnath
+- Rupsha Debnath
 
+(Add teammates here)
 
+---
+
+# 📜 License
+
+This project is licensed under the MIT License.
 
 ---
 
 <div align="center">
-⭐ If you found Lumora AI inspiring, consider giving this repository a star!
 
-Made with ❤️ using IBM Bob, IBM Granite, FastAPI, MongoDB Atlas, and Next.js.
+### ⭐ If you like Lumora AI, consider giving this repository a Star!
 
-</div> ````
+Made with ❤️ using IBM Bob, IBM Granite, FastAPI, MongoDB Atlas, Next.js and React.
+
+</div>
