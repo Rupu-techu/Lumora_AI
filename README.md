@@ -150,3 +150,84 @@ User authentication with protected creative workspaces.
 |    IBM Granite     |                  |   MongoDB Atlas    |
 | AI Content Engine  |                  | Project Storage    |
 +--------------------+                  +--------------------+
+
+```
+
+##🛠 Tech Stack
+```
+
+Frontend
+Next.js 15
+React 19
+TypeScript
+Tailwind CSS
+Backend
+FastAPI
+Python
+Motor
+Database
+MongoDB Atlas
+AI
+IBM Granite Foundation Models
+Development
+IBM Bob
+
+```
+
+##🤖 IBM Bob Contribution
+```
+
+IBM Bob served as the primary AI-assisted development environment throughout the project.
+
+It was used for:
+
+Frontend component generation
+Backend architecture
+FastAPI API development
+MongoDB integration
+Code refactoring
+UI improvements
+Bug fixing
+Development acceleration
+
+IBM Bob significantly reduced development time while helping maintain a clean and scalable architecture.
+```
+
+
+##🧠 IBM Granite Integration
+```
+
+IBM Granite powers Lumora AI's creative intelligence.
+
+It enables:
+
+Story Generation
+Character Generation
+Creative Brainstorming
+World Building
+Content Expansion
+Intelligent Creative Assistance
+```
+
+##📂 Project Structure
+```
+
+Lumora-AI/
+
+├── frontend/
+│   ├── src/
+│   ├── components/
+│   ├── app/
+│   └── public/
+│
+├── backend/
+│   ├── app/
+│   ├── routes/
+│   ├── services/
+│   ├── models/
+│   ├── database.py
+│   └── main.py
+│
+├── assets/
+├── README.md
+└── LICENSE
