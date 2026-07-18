@@ -90,23 +90,6 @@ Create rich characters including:
 
 ---
 
-## 🌍 World Builder
-
-Generate immersive environments, civilizations, locations, cultures, and lore.
-
----
-
-## 📁 Project Workspace
-
-Organize all creative assets in one place.
-
----
-
-## 💾 Cloud Project Management
-
-Store creative projects securely using MongoDB Atlas.
-
----
 
 ## 🎨 Modern Creative Dashboard
 
@@ -153,7 +136,7 @@ User authentication with protected creative workspaces.
 
 ```
 
-##🛠 Tech Stack
+# 🛠 Tech Stack
 ```
 
 Frontend
@@ -174,7 +157,7 @@ IBM Bob
 
 ```
 
-##🤖 IBM Bob Contribution
+# 🤖 IBM Bob Contribution
 ```
 
 IBM Bob served as the primary AI-assisted development environment throughout the project.
@@ -194,7 +177,7 @@ IBM Bob significantly reduced development time while helping maintain a clean an
 ```
 
 
-##🧠 IBM Granite Integration
+# 🧠 IBM Granite Integration
 ```
 
 IBM Granite powers Lumora AI's creative intelligence.
@@ -209,7 +192,7 @@ Content Expansion
 Intelligent Creative Assistance
 ```
 
-##📂 Project Structure
+# 📂 Project Structure
 ```
 
 Lumora-AI/
